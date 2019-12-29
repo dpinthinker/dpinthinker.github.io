@@ -3,21 +3,27 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Deep In Thinking | Just do it</title>
+  <title>心若菩提 身如征铎 | Deep In Thinking | Just do it</title>
 
   
   <meta name="author" content="dpthinker">
   
 
   
+  <meta name="description" content="昨天下半年的工作基本联调验证结束，心里终于放松了起来，便订了一本今曹德旺先生的《心若菩提》。今天早上就收到了，本想慢慢读，不成想一读就放不下了，一口气读到现在，读完合上书还是激动不已。
+想想好久没有这么安静地读书了，参加读书会的上个月也退了出来，因为最近几个月着实没有太多精力去读书和总结，每次的作业">
+  
 
+  
+  
+  <meta name="keywords" content="个人总结">
   
 
   <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
-  
+  <meta property="og:title" content="心若菩提 身如征铎"/>
 
   <meta property="og:site_name" content="Deep In Thinking"/>
 
@@ -58,12 +64,11 @@
 </header>
 
     <main class="site-main posts-loop">
-    
-  <article>
+    <article>
 
   
     
-    <h3 class="article-title"><a href="/2019/12/29/summary-2019/"><span>心若菩提 身如征铎</span></a></h3>
+    <h3 class="article-title"><span>心若菩提 身如征铎</span></h3>
     
   
 
@@ -134,62 +139,32 @@
   </div>
 </article>
 
-
-
-  <article>
-
   
-    
-    <h3 class="article-title"><a href="/2019/12/05/about/"><span>关于</span></a></h3>
-    
-  
+	<section id="comment" class="comment">
+		<div id="gitalk-container"></div>
+	</section>
+	<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+	<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+	<script>
+		var gitalk = new Gitalk({
+			clientID: '288f10c4e81476750987',
+			clientSecret: '30d0e1f5ab6ccb5599d3f9102e3ad2e2fee72995',
+			repo: 'dpinthinker.github.io',
+			owner: 'dpinthinker',
+			admin: ['dpinthinker'],
+			id: location.pathname,
+			distractionFreeMode: false
+		})
 
-  <div class="article-top-meta">
-    <span class="posted-on">
-      <a href="/2019/12/05/about/" rel="bookmark">
-        <time class="entry-date published" datetime="2019-12-05T13:10:21.000Z">
-          2019-12-05
-        </time>
-      </a>
-    </span>
-  </div>
-
-
-  
-
-  <div class="article-content">
-    <div class="entry">
-      
-        <h2 id="关于我"><a href="#关于我" class="headerlink" title="关于我"></a>关于我</h2><p>高级软件工程师 @<strong>华为</strong></p>
-<p>8年Android系统开发和优化经验，业余学习了些机器学习和TensorFlow的皮毛。</p>
-<p>2018~2019年 <strong>Google Developer Expert</strong> in Machine Learning，2018年11月由谷歌全程资助去美国硅谷谷歌总部参加GDE Summit 2018。</p>
-<h2 id="联系方式"><a href="#联系方式" class="headerlink" title="联系方式"></a>联系方式</h2><p>dpthinker#at#qq.com</p>
-
-      
-    </div>
-
-  </div>
-
-  <div class="article-footer">
-    <div class="article-meta pull-left">
-
-    
-
-    
-
-    </div>
-
-    
-  </div>
-</article>
+		gitalk.render('gitalk-container')
+	</script>
 
 
 
 
-<nav class="pagination">
-  
-  
-</nav>
+
+
+
     </main>
 
     <footer class="site-footer">
