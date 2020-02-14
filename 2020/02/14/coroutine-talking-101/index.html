@@ -1,0 +1,195 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>白话协程之基础概念 | Deep In Thinking | Just do it</title>
+
+  
+  <meta name="author" content="dpthinker">
+  
+
+  
+  <meta name="description" content="一、协程是什么？在Android主推Kotlin语言后，Kotlin的coroutine协程特性赢得了大家的广泛关注，但是，协程到底是什么呢？有人说，协程就是轻量的线程，把它当成线程看就行了。然后，真的是这样吗？">
+  
+
+  
+  
+  <meta name="keywords" content="协程">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <meta property="og:title" content="白话协程之基础概念"/>
+
+  <meta property="og:site_name" content="Deep In Thinking"/>
+
+  
+  <meta property="og:image" content="/favicon.ico"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="Deep In Thinking" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+</head>
+
+
+<body>
+<div class="blog">
+  <div class="content">
+
+    <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">Deep In Thinking</a>
+    </h1>
+    <p class="site-description">Just do it</p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">Home</a></li>
+      
+        <li><a href="/archives">Archives</a></li>
+      
+        <li><a href="/categories">Categories</a></li>
+      
+        <li><a href="/tags">Tags</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+    <main class="site-main posts-loop">
+    <article>
+
+  
+    
+    <h3 class="article-title"><span>白话协程之基础概念</span></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2020/02/14/coroutine-talking-101/" rel="bookmark">
+        <time class="entry-date published" datetime="2020-02-14T14:27:43.000Z">
+          2020-02-14
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <h2 id="一、协程是什么？"><a href="#一、协程是什么？" class="headerlink" title="一、协程是什么？"></a>一、协程是什么？</h2><p>在Android主推Kotlin语言后，Kotlin的coroutine协程特性赢得了大家的广泛关注，但是，协程到底是什么呢？有人说，协程就是轻量的线程，把它当成线程看就行了。然后，真的是这样吗？</p>
+<a id="more"></a> 
+
+<p>协程是并发的一种实现方式，我们非常的熟悉的另外一个概念就是线程，线程属于并行的范畴。</p>
+<p>维基百科上，对协程coroutine的定义如下:</p>
+<blockquote>
+<p>Coroutines are computer program <strong>components</strong> that generalize <strong>subroutines</strong> for <strong>non-preemptive multitasking</strong>, by allowing execution to be <strong>suspended</strong> and <strong>resumed</strong>.</p>
+</blockquote>
+<p>协程是在单核CPU场景中发展出来的概念，上面的定义中，可以看到协程是非抢占的多任务编程组件，并且提供了挂起和恢复的执行接口。通过挂起和恢复多个任务，实现在单个CPU上交叉处理多个任务的并发功能。</p>
+<p>相对的，线程是基于抢占的多任务并行编程组件，是多核CPU出来后为提高CPU利用率而设计的，不同的任务可以抢占CPU运行资源（即线程）。</p>
+<p><strong>并行是相对于串行的概念，并发是对串行的优化。</strong>并发是在串行的基础上，增加了任务的切换。协程，就是在一个线程的基础上，增加了不同<strong>任务栈</strong>的切换，通过不同任务栈的挂起和恢复，实现并发的功能。</p>
+<h2 id="二、举例说明"><a href="#二、举例说明" class="headerlink" title="二、举例说明"></a>二、举例说明</h2><p>现在我们以做家务和听音乐为例，讲解下串行、并行和并发的差别。</p>
+<p>串行：先洗碗，再擦灶台，最后打开手机听音乐。这里三个工序是一个个进行的，只能做完一个再用另外一个。虽然，手和耳朵是可以一起使用的，但是并没有充分利用起来。</p>
+<p>并行：先打开手机听音乐，再洗碗，最后擦灶台。听音乐的工序提前打开了，就可以一边用耳朵听音乐，一边用手干活了。</p>
+<p>并发：不能先洗碗，再擦灶台。而是，先擦一部分灶台，再刷一部分碗，再擦一部分灶台，再刷一部分碗，一直这样交叉的处理。如果每一部分的时间非常短的时候，在旁观者看来，像是洗碗和擦灶台是一起做的。实际上，在一个时刻只有一双手要么在刷碗，要么擦灶台，这就是并发。</p>
+<h2 id="三、协程的优势和劣势"><a href="#三、协程的优势和劣势" class="headerlink" title="三、协程的优势和劣势"></a>三、协程的优势和劣势</h2><p>从上面的描述，我们可以看到协程是在一个CPU核上倒腾并发而已，在现在动辄8核的移动设备上，并没有充分利用其多核资源。那么，协程到底相对线程有哪些优势呢？有哪些工作又不适合协程来做呢？</p>
+<p>线程可以让开发者充分的利用其多核计算资源，但是也引入很多问题，比如：</p>
+<ul>
+<li><strong>锁竞争</strong>，进而导致资源空等</li>
+<li><strong>线程不能太多</strong>，超过CPU核数后，多余的线程只能等待时机去抢占CPU资源。在高并发场景，如云计算，会成为瓶颈。</li>
+<li>线程切换需要通过系统调用实现，<strong>切换成本高</strong>。</li>
+<li>在JVM语言中，创建线程太多也会导致OOM，因为每个<strong>线程占的内存比较大</strong>。</li>
+<li>在耗时操作中，比如需长时间返回的网络IO操作，会出现<strong>依赖回调</strong>的情况。若有很多回调的话，会触发多层次的<strong>嵌套回调</strong>，对开发者阅读来说很不友好。</li>
+</ul>
+<p>对上面的问题，协程恰好有它的长处，比如：</p>
+<ul>
+<li>因为本身就是在单核上并发，每段任务都可看作是<strong>原子操作</strong>，所以，可以<strong>消除锁</strong>的使用。</li>
+<li>协程每个任务栈的占用的内存小，一个进程内<strong>可创建海量的协程</strong>。</li>
+<li>协程切换只需要在用户空间处理，不需要系统调用，<strong>切换成本低</strong>。</li>
+<li>因为协程间是在同一个线程内工作，耗时任务栈完成后，获得协程执行权后，可以直接返回数据，<strong>无需回调</strong>。</li>
+</ul>
+<h2 id="四、总结"><a href="#四、总结" class="headerlink" title="四、总结"></a>四、总结</h2><p>协程<strong>非常适合高并发的IO操作</strong>，因为当IO操作触发后，可切换到其他IO的触发操作，可以同时触发海量的IO，但是消耗更多的线程资源，消耗的只是海量很小的协程的栈大小。</p>
+<p>协程<strong>非常不适合CPU繁忙型</strong>的任务，因为协程只是在一个CPU核上调动，不能充分利用CPU资源。</p>
+<p>下篇文章，我们分析一个<a href="https://github.com/cloudwu/coroutine/" target="_blank" rel="noopener">C语言协程库</a>的具体实现。</p>
+<h2 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h2><p><a href="https://blog.codingnow.com/2012/07/c_coroutine.html" target="_blank" rel="noopener">https://blog.codingnow.com/2012/07/c_coroutine.html</a></p>
+<p><a href="https://github.com/cloudwu/coroutine/" target="_blank" rel="noopener">https://github.com/cloudwu/coroutine/</a></p>
+<p><a href="https://zhuanlan.zhihu.com/p/27519705" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/27519705</a></p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/协程/">协程</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+  
+	<section id="comment" class="comment">
+		<div id="gitalk-container"></div>
+	</section>
+	<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+	<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+	<script>
+		var gitalk = new Gitalk({
+			clientID: '288f10c4e81476750987',
+			clientSecret: '30d0e1f5ab6ccb5599d3f9102e3ad2e2fee72995',
+			repo: 'dpinthinker.github.io',
+			owner: 'dpinthinker',
+			admin: ['dpinthinker'],
+			id: location.pathname,
+			distractionFreeMode: false
+		})
+
+		gitalk.render('gitalk-container')
+	</script>
+
+
+
+
+
+
+
+    </main>
+
+    <footer class="site-footer">
+  <p class="site-info">
+    Proudly powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    </br>
+    
+    &copy; 2020 dpthinker
+    
+  </p>
+</footer>
+    
+  </div>
+</div>
+</body>
+</html>
