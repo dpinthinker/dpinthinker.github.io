@@ -205,7 +205,7 @@ cloudwu/coroutine设计的是Asymmetric coroutine，所谓Asymmetric coroutine�
 <li><p>将当前运行的协程的状态置为<code>COROUTINE_SUSPEND</code>，调度器中当前运行的协程<code>id</code>设为-1</p>
 </li>
 <li><p>切换到上下文到<code>S-&gt;main</code>，继续执行主进程的工作</p>
-<p>注：姑且把把主干流程的称之为主进程</p>
+<p>注：姑且把主干流程称之为主进程</p>
 </li>
 </ul>
 <h3 id="4、总结"><a href="#4、总结" class="headerlink" title="4、总结"></a>4、总结</h3><ul>
