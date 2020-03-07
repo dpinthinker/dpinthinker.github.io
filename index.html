@@ -63,6 +63,68 @@
 
   
     
+    <h3 class="article-title"><a href="/2020/02/16/coroutine-talking-code-ananlyze/"><span>白话协程之极简协程库分析</span></a></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2020/02/16/coroutine-talking-code-ananlyze/" rel="bookmark">
+        <time class="entry-date published" datetime="2020-02-16T10:56:14.000Z">
+          2020-02-16
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <p>[TOC]</p>
+<blockquote>
+<p> “Talk is cheap. Show me the code.”   ― Linus Torvalds.</p>
+</blockquote>
+<p>在上篇文章，我们介绍了协程的基本概念，现在我们借用云风设计和实现的C协程库，对协程进行更深入剖析，相信这篇文章可以让大家更深入更清晰了解协程本质。</p>
+<h2 id="一、极简协程库"><a href="#一、极简协程库" class="headerlink" title="一、极简协程库"></a>一、极简协程库</h2><p>在github上搜索<code>coroutine</code>，第一个仓便是<a href="https://github.com/cloudwu" target="_blank" rel="noopener">cloudwu</a>/<strong><a href="https://github.com/cloudwu/coroutine" target="_blank" rel="noopener">coroutine</a></strong>，简单看后发现设计极简，代码相当的少，是用来研究协程的绝佳例子。</p>
+<p>整个库只有两个文件：一个头文件<code>coroutine.h</code>和一个实现文件<code>coroutine.c</code>，总共<strong>191行</strong>代码。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">-------------------------------------------------------------------------------</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">Language                     files          blank        comment           code</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">-------------------------------------------------------------------------------</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line">C                                1             17              0            175</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line">C/C++ Header                     1              6              0             16</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line">-------------------------------------------------------------------------------</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">7</span></pre></td><td class="code"><pre><span class="line">SUM:                             2             23              0            191</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">8</span></pre></td><td class="code"><pre><span class="line">-------------------------------------------------------------------------------</span></pre></td></tr></table></figure>
+
+<p><code>cloudwu/coroutine</code>设计的是<code>Asymmetric coroutine</code>，所谓<code>Asymmetric coroutine</code>就是提供了两个接口（<code>invoke</code>和<code>suspend</code>）用于协程调度。对应的，<code>Symmetric coroutine</code>就是提供了一种切换接口的协程。</p>
+        
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/协程-编程语言/">协程,编程语言</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+
+
+  <article>
+
+  
+    
     <h3 class="article-title"><a href="/2020/02/14/coroutine-talking-101/"><span>白话协程之基础概念</span></a></h3>
     
   
@@ -83,7 +145,7 @@
   <div class="article-content">
     <div class="entry">
       
-        <h2 id="一、协程是什么？"><a href="#一、协程是什么？" class="headerlink" title="一、协程是什么？"></a>一、协程是什么？</h2><p>在Android主推Kotlin语言后，Kotlin的coroutine协程特性赢得了大家的广泛关注，但是，协程到底是什么呢？有人说，协程就是轻量的线程，把它当成线程看就行了。然后，真的是这样吗？</p>
+        <h2 id="一、协程是什么？"><a href="#一、协程是什么？" class="headerlink" title="一、协程是什么？"></a>一、协程是什么？</h2><p>在Android主推Kotlin语言后，Kotlin的Coroutine协程特性赢得了大家的广泛关注，一时风光无两。但是，协程到底是什么呢？有人说，协程就是轻量的线程，把它当成线程看就行了。然而，真的是这样吗？</p>
         
       
     </div>
