@@ -1,100 +1,4 @@
-<!DOCTYPE HTML>
-<html>
-<head>
-  <meta charset="utf-8">
-  
-  <title>白话协程之极简协程库分析 | Deep In Thinking | Just do it</title>
-
-  
-  <meta name="author" content="dpthinker">
-  
-
-  
-  <meta name="description" content="“Talk is cheap. Show me the code.”   ― Linus Torvalds.
-
-在上篇文章，我们介绍了协程的基本概念，现在我们借用云风设计和实现的C协程库，对协程进行更深入剖析，相信这篇文章可以让大家更深入更清晰了解协程本质。
-一、极简协程库在github上搜索coroutine，第一个仓便是cloudwu/coroutine，简单看后发现设计极简，代码相当的少，是用来研究协程的绝佳例子。
-整个库只有两个文件：一个头文件coroutine.h和一个实现文件coroutine.c，总共191行代码。
-1-------------------------------------------------------------------------------2Language                     files          blank        comment           code3-------------------------------------------------------------------------------4C                                1             17              0            1755C/C++ Header                     1              6              0             166-------------------------------------------------------------------------------7SUM:                             2             23              0            1918-------------------------------------------------------------------------------
-
-cloudwu/coroutine设计的是Asymmetric coroutine，所谓Asymmetric coroutine就是提供了两个接口（invoke和suspend）用于协程调度。对应的，Symmetric coroutine就是提供了一种切换接口的协程。">
-  
-
-  
-  
-  <meta name="keywords" content="协程,编程语言">
-  
-
-  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
-
-  <meta property="og:title" content="白话协程之极简协程库分析"/>
-
-  <meta property="og:site_name" content="Deep In Thinking"/>
-
-  
-  <meta property="og:image" content="/favicon.ico"/>
-  
-
-  <link href="/favicon.ico" rel="icon">
-  <link rel="alternate" href="/atom.xml" title="Deep In Thinking" type="application/atom+xml">
-  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
-</head>
-
-
-<body>
-<div class="blog">
-  <div class="content">
-
-    <header>
-  <div class="site-branding">
-    <h1 class="site-title">
-      <a href="/">Deep In Thinking</a>
-    </h1>
-    <p class="site-description">Just do it</p>
-  </div>
-  <nav class="site-navigation">
-    <ul>
-      
-        <li><a href="/">Home</a></li>
-      
-        <li><a href="/archives">Archives</a></li>
-      
-        <li><a href="/categories">Categories</a></li>
-      
-        <li><a href="/tags">Tags</a></li>
-      
-    </ul>
-  </nav>
-</header>
-
-    <main class="site-main posts-loop">
-    <article>
-
-  
-    
-    <h3 class="article-title"><span>白话协程之极简协程库分析</span></h3>
-    
-  
-
-  <div class="article-top-meta">
-    <span class="posted-on">
-      <a href="/2020/02/16/coroutine-talking-code-ananlyze/" rel="bookmark">
-        <time class="entry-date published" datetime="2020-02-16T10:56:14.000Z">
-          2020-02-16
-        </time>
-      </a>
-    </span>
-  </div>
-
-
-  
-
-  <div class="article-content">
-    <div class="entry">
-      
-        <blockquote>
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content=""><title>白话协程之极简协程库分析 | Deep In Thinking</title><link rel="stylesheet" type="text/css" href="/css/style.css?v=0.0.0"><link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/normalize.css/normalize.min.css"><link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/purecss/build/pure-min.min.css"><link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/purecss/build/grids-responsive-min.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script><link rel="icon" mask="" sizes="any" href="/favicon.ico"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"><script type="text/javascript" src="//cdn.jsdelivr.net/npm/clipboard/dist/clipboard.min.js"></script><script type="text/javascript" src="//cdn.jsdelivr.net/gh/codeseven/toastr/build/toastr.min.js"></script><link rel="stylesheet" href="//cdn.jsdelivr.net/gh/codeseven/toastr/build/toastr.min.css"><meta name="generator" content="Hexo 4.0.0"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">白话协程之极简协程库分析</h1><a id="logo" href="/.">Deep In Thinking</a><p class="description">Just do it</p></div><div id="nav-menu"><a class="current" href="/."><i class="fa fa-home"> Home</i></a><a href="/archives/"><i class="fa fa-archive"> Archive</i></a><a href="/about/"><i class="fa fa-user"> About</i></a></div></div><div class="pure-g" id="layout"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">白话协程之极简协程库分析</h1><div class="post-meta">2020-02-16</div><div class="post-content"><blockquote>
 <p> “Talk is cheap. Show me the code.”   ― Linus Torvalds.</p>
 </blockquote>
 <p>在上篇文章，我们介绍了协程的基本概念，现在我们借用云风设计和实现的C协程库，对协程进行更深入剖析，相信这篇文章可以让大家更深入更清晰了解协程本质。</p>
@@ -244,72 +148,14 @@ cloudwu/coroutine设计的是Asymmetric coroutine，所谓Asymmetric coroutine�
 <p><a href="http://man7.org/linux/man-pages/man3/makecontext.3.html" target="_blank" rel="noopener">http://man7.org/linux/man-pages/man3/makecontext.3.html</a></p>
 <p><a href="https://ftp.gnu.org/old-gnu/Manuals/glibc/html_node/System-V-contexts.html" target="_blank" rel="noopener">https://ftp.gnu.org/old-gnu/Manuals/glibc/html_node/System-V-contexts.html</a></p>
 <p><a href="https://github.com/zfengzhen/Blog/blob/master/article/ucontext簇函数学习.md" target="_blank" rel="noopener">https://github.com/zfengzhen/Blog/blob/master/article/ucontext%E7%B0%87%E5%87%BD%E6%95%B0%E5%AD%A6%E4%B9%A0.md</a></p>
-
-      
-    </div>
-
-  </div>
-
-  <div class="article-footer">
-    <div class="article-meta pull-left">
-
-    
-
-    
-    
-
-    <span class="post-tags">
-      <i class="icon-tags"></i>
-        <a href="/tags/协程-编程语言/">协程,编程语言</a>
-    </span>
-    
-
-    </div>
-
-    
-  </div>
-</article>
-
-  
-	<section id="comment" class="comment">
-		<div id="gitalk-container"></div>
-	</section>
-	<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
-	<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
-	<script>
-		var gitalk = new Gitalk({
-			clientID: '288f10c4e81476750987',
-			clientSecret: '30d0e1f5ab6ccb5599d3f9102e3ad2e2fee72995',
-			repo: 'dpinthinker.github.io',
-			owner: 'dpinthinker',
-			admin: ['dpinthinker'],
-			id: location.pathname,
-			distractionFreeMode: false
-		})
-
-		gitalk.render('gitalk-container')
-	</script>
-
-
-
-
-
-
-
-    </main>
-
-    <footer class="site-footer">
-  <p class="site-info">
-    Proudly powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
-    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
-    </br>
-    
-    &copy; 2020 dpthinker
-    
-  </p>
-</footer>
-    
-  </div>
-</div>
-</body>
-</html>
+</div><div class="tags"><a href="/tags/%E5%8D%8F%E7%A8%8B/"><i class="fa fa-tag"></i>协程</a></div><div class="post-nav"><a class="next" href="/2020/02/14/coroutine-talking-101/">白话协程之基础概念</a></div><div id="container"></div><link rel="stylesheet" type="text/css" href="//unpkg.com/gitalk/dist/gitalk.css?v=0.0.0"><script type="text/javascript" src="//cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.js?v=0.0.0"></script><script type="text/javascript" src="//unpkg.com/gitalk/dist/gitalk.min.js?v=0.0.0"></script><script>var gitalk = new Gitalk({
+  clientID: '288f10c4e81476750987',
+  clientSecret: '30d0e1f5ab6ccb5599d3f9102e3ad2e2fee72995',
+  repo: 'dpinthinker.github.io',
+  owner: 'dpinthinker',
+  admin: ['dpinthinker'],
+  id: md5(location.pathname),
+  distractionFreeMode: false
+})
+gitalk.render('container')
+</script></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><form class="search-form" action="//www.google.com/search" method="get" accept-charset="utf-8" target="_blank"><input type="text" name="q" maxlength="20" placeholder="Search"/><input type="hidden" name="sitesearch" value="http://yoursite.com"/></form></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> Categories</i></div></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> Tags</i></div><div class="tagcloud"><a href="/tags/%E5%8D%8F%E7%A8%8B/" style="font-size: 15px;">协程</a> <a href="/tags/%E4%B8%AA%E4%BA%BA%E6%80%BB%E7%BB%93/" style="font-size: 15px;">个人总结</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> Recent</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2020/02/16/coroutine-talking-code-ananlyze/">白话协程之极简协程库分析</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/02/14/coroutine-talking-101/">白话协程之基础概念</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/12/31/summary-2019/">Bye 2019, Hello 2020</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/12/29/reading_cdw/">心若菩提 身如征铎</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/12/05/about/">关于</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-external-link"> Links</i></div><ul></ul><a href="http://www.example1.com/" title="site-name1" target="_blank">site-name1</a><ul></ul><a href="http://www.example2.com/" title="site-name2" target="_blank">site-name2</a><ul></ul><a href="http://www.example3.com/" title="site-name3" target="_blank">site-name3</a></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">Copyright © 2020 <a href="/." rel="nofollow">Deep In Thinking.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div></div></div><a class="show" id="rocket" href="#top"></a><script type="text/javascript" src="/js/totop.js?v=0.0.0" async></script><script type="text/javascript" src="//cdn.jsdelivr.net/gh/fancyapps/fancybox/dist/jquery.fancybox.min.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.0" async></script><link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox/dist/jquery.fancybox.min.css"><script type="text/javascript" src="/js/copycode.js" successtext="Copy Successed!"></script><link rel="stylesheet" type="text/css" href="/css/copycode.css"><script type="text/javascript" src="/js/codeblock-resizer.js?v=0.0.0"></script><script type="text/javascript" src="/js/smartresize.js?v=0.0.0"></script></div></body></html>
